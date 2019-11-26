@@ -2,9 +2,7 @@
 *.iml
 
 .gradle
-gradle
-build
 
-gradlew
+build
 gradlew.bat
 
