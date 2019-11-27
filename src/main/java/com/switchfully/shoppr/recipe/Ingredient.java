@@ -30,6 +30,10 @@ public class Ingredient {
         this.quantity = quantity;
     }
 
+    public static Ingredient ingredient(Food food, int amount, QuantityType quantityType) {
+        return new Ingredient(food, new Quantity(amount, quantityType));
+    }
+
     public long getId() {
         return id;
     }

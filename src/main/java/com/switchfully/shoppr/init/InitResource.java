@@ -1,18 +1,20 @@
 package com.switchfully.shoppr.init;
 
-import com.switchfully.shoppr.food.Food;
 import com.switchfully.shoppr.food.FoodRepository;
-import com.switchfully.shoppr.recipe.Ingredient;
-import com.switchfully.shoppr.recipe.Quantity;
-import com.switchfully.shoppr.recipe.Recipe;
-import com.switchfully.shoppr.recipe.RecipeRepository;
+import com.switchfully.shoppr.food.FoodType;
+import com.switchfully.shoppr.recipe.*;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Arrays;
+import java.io.IOException;
 
-import static com.switchfully.shoppr.food.FoodType.VEGETABLE;
+import static com.switchfully.shoppr.food.Food.food;
+import static com.switchfully.shoppr.food.FoodType.*;
+import static com.switchfully.shoppr.recipe.Ingredient.ingredient;
 import static com.switchfully.shoppr.recipe.QuantityType.PIECE;
+import static com.switchfully.shoppr.recipe.RecipeBuilder.recipe;
+import static java.nio.file.Files.readAllLines;
 import static java.util.Arrays.asList;
 
 @RestController
@@ -28,20 +30,30 @@ public class InitResource {
     }
 
     @GetMapping(path = "init")
-    public void init() {
+    public void init() throws IOException {
         foodRepository.deleteAll();
         recipeRepository.deleteAll();
 
-        foodRepository.saveAll(
+        loadFood("Vegetables.csv", VEGETABLE);
+        loadFood("Spices.csv", SPICE);
+        loadFood("Fruits.csv", FRUIT);
+
+
+        recipeRepository.saveAll(
                 asList(
-                        new Food("Tomato", VEGETABLE)
-                )
-        );
+                        recipe()
+                                .description("Een heerlijke tomaat")
+                                .ingredients(
+                                        ingredient(foodRepository.findByName("Tomato"), 1, PIECE)
+                                )
+                                .build()
+                ));
+    }
 
-        Recipe recipe = new Recipe("Een heerlijke tomaat",
-                new Ingredient(foodRepository.findByName("Tomato"), new Quantity(1, PIECE))
-        );
-
-        recipeRepository.save(recipe);
+    private void loadFood(String fileName, FoodType foodType) throws IOException {
+        readAllLines(new ClassPathResource(fileName).getFile().toPath())
+                .stream()
+                .map(v -> food(v, foodType))
+                .forEach(v -> foodRepository.save(v));
     }
 }

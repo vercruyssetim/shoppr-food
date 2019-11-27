@@ -26,9 +26,9 @@ public class Recipe {
 
     }
 
-    public Recipe(String description, Ingredient... ingredients) {
+    public Recipe(String description, List<Ingredient> ingredients) {
         this.description = description;
-        this.ingredients = Arrays.asList(ingredients);
+        this.ingredients = ingredients;
     }
 
     public long getId() {

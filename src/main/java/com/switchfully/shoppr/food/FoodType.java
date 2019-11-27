@@ -7,5 +7,6 @@ public enum FoodType {
     MEAT,
     SPICE,
     DAIRY,
-    OIL
+    OIL,
+    CARB
 }

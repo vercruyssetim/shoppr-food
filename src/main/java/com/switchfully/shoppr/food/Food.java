@@ -21,9 +21,13 @@ public class Food {
     private Food() {
     }
 
-    public Food(String name, FoodType foodType) {
+    private Food(String name, FoodType foodType) {
         this.name = name;
         this.foodType = foodType;
+    }
+
+    public static Food food(String name, FoodType foodType) {
+        return new Food(name, foodType);
     }
 
     public long getId() {
