@@ -4,6 +4,8 @@ import com.switchfully.shoppr.food.Food;
 
 import javax.persistence.*;
 
+import java.util.Objects;
+
 import static javax.persistence.GenerationType.SEQUENCE;
 
 @Entity
@@ -26,6 +28,8 @@ public class Ingredient {
     }
 
     public Ingredient(Food food, Quantity quantity) {
+        Objects.requireNonNull(food);
+        Objects.requireNonNull(quantity);
         this.food = food;
         this.quantity = quantity;
     }
