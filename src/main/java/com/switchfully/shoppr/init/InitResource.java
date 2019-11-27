@@ -4,6 +4,8 @@ import com.switchfully.shoppr.food.FoodRepository;
 import com.switchfully.shoppr.food.FoodType;
 import com.switchfully.shoppr.recipe.IngredientRepository;
 import com.switchfully.shoppr.recipe.RecipeRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,7 +26,8 @@ import static java.util.Arrays.asList;
 @RestController
 public class InitResource {
 
-    private Resource resourceFile;
+    private static Logger LOGGER = LoggerFactory.getLogger(InitResource.class);
+
     private FoodRepository foodRepository;
     private IngredientRepository ingredientRepository;
     private RecipeRepository recipeRepository;
@@ -44,6 +47,10 @@ public class InitResource {
         loadFood("classpath:Vegetables.csv", VEGETABLE);
         loadFood("classpath:Spices.csv", SPICE);
         loadFood("classpath:Fruits.csv", FRUIT);
+        loadFood("classpath:Dairies.csv", DAIRY);
+        loadFood("classpath:Meats.csv", MEAT);
+        loadFood("classpath:Oils.csv", OIL);
+        loadFood("classpath:Carbs.csv", CARB);
 
 
         recipeRepository.saveAll(
@@ -55,10 +62,11 @@ public class InitResource {
                                 )
                                 .build()
                 ));
+
+        LOGGER.info("initialisation succeeded!!");
     }
 
     private void loadFood(String fileName, FoodType foodType) throws IOException {
-
         try (InputStream resource = new ClassPathResource(fileName).getInputStream();
              BufferedReader reader = new BufferedReader(new InputStreamReader(resource))) {
             reader
