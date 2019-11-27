@@ -21,18 +21,20 @@ import static java.util.Arrays.asList;
 public class InitResource {
 
     private FoodRepository foodRepository;
-
+    private IngredientRepository ingredientRepository;
     private RecipeRepository recipeRepository;
 
-    public InitResource(FoodRepository foodRepository, RecipeRepository recipeRepository) {
+    public InitResource(FoodRepository foodRepository, IngredientRepository ingredientRepository, RecipeRepository recipeRepository) {
         this.foodRepository = foodRepository;
+        this.ingredientRepository = ingredientRepository;
         this.recipeRepository = recipeRepository;
     }
 
     @GetMapping(path = "init")
     public void init() throws IOException {
-        foodRepository.deleteAll();
         recipeRepository.deleteAll();
+        ingredientRepository.deleteAll();
+        foodRepository.deleteAll();
 
         loadFood("Vegetables.csv", VEGETABLE);
         loadFood("Spices.csv", SPICE);
