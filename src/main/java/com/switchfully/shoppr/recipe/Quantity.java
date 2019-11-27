@@ -5,19 +5,19 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class Quantity {
 
-    private long amount;
+    private int amount;
 
     private QuantityType quantityType;
 
     private Quantity() {
     }
 
-    public Quantity(long amount, QuantityType quantityType) {
+    public Quantity(int amount, QuantityType quantityType) {
         this.amount = amount;
         this.quantityType = quantityType;
     }
 
-    public long getAmount() {
+    public int getAmount() {
         return amount;
     }
 

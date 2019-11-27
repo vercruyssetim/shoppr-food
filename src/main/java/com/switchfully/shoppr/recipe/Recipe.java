@@ -1,6 +1,7 @@
 package com.switchfully.shoppr.recipe;
 
 import javax.persistence.*;
+import java.util.Arrays;
 import java.util.List;
 
 import static javax.persistence.CascadeType.ALL;
@@ -25,9 +26,9 @@ public class Recipe {
 
     }
 
-    public Recipe(String description, List<Ingredient> ingredients) {
+    public Recipe(String description, Ingredient... ingredients) {
         this.description = description;
-        this.ingredients = ingredients;
+        this.ingredients = Arrays.asList(ingredients);
     }
 
     public long getId() {

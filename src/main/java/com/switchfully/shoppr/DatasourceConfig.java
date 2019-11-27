@@ -11,13 +11,14 @@ import javax.sql.DataSource;
 @Configuration
 public class DatasourceConfig {
 
-    @Value("${spring.datasource.url}")
+    @Value("${spring.datasource.url:'jdbc:h2:mem:testDb'}")
     private String dbUrl;
 
     @Bean
     public DataSource dataSource() {
         HikariConfig config = new HikariConfig();
         config.setJdbcUrl(dbUrl);
+        config.setDriverClassName("org.h2.Driver");
         return new HikariDataSource(config);
     }
 }

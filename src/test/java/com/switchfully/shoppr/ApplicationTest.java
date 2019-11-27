@@ -33,9 +33,8 @@ class ApplicationTest {
     @Test
     void recipe() {
         Recipe recipe = new Recipe("Een heerlijke tomaat",
-                asList(
                         new Ingredient(new Food("Tomato", VEGETABLE), new Quantity(1, PIECE))
-                ));
+                );
 
         recipeRepository.save(recipe);
     }
