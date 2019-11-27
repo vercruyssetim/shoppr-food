@@ -1,0 +1,17 @@
+[
+  {
+    "description": "One tasty tomato",
+    "ingredientList": [
+      {
+        "name": "Tomato",
+        "amount": "1",
+        "type": "PIECE"
+      },
+      {
+        "name": "Parmesan",
+        "amount": "200",
+        "type": "GRAMS"
+      }
+    ]
+  }
+]

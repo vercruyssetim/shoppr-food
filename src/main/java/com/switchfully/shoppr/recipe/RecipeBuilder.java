@@ -29,4 +29,9 @@ public class RecipeBuilder {
         this.ingredients = Arrays.asList(ingredients);
         return this;
     }
+
+    public RecipeBuilder ingredients(List<Ingredient> ingredients) {
+        this.ingredients = ingredients;
+        return this;
+    }
 }

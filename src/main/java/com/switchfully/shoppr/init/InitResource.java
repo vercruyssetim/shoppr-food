@@ -1,20 +1,19 @@
 package com.switchfully.shoppr.init;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.switchfully.shoppr.food.FoodRepository;
 import com.switchfully.shoppr.food.FoodType;
+import com.switchfully.shoppr.recipe.Ingredient;
 import com.switchfully.shoppr.recipe.IngredientRepository;
 import com.switchfully.shoppr.recipe.RecipeRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.util.List;
 
 import static com.switchfully.shoppr.food.Food.food;
 import static com.switchfully.shoppr.food.FoodType.*;
@@ -22,6 +21,7 @@ import static com.switchfully.shoppr.recipe.Ingredient.ingredient;
 import static com.switchfully.shoppr.recipe.QuantityType.PIECE;
 import static com.switchfully.shoppr.recipe.RecipeBuilder.recipe;
 import static java.util.Arrays.asList;
+import static java.util.stream.Collectors.toList;
 
 @RestController
 public class InitResource {
@@ -52,27 +52,39 @@ public class InitResource {
         loadFood("classpath:Oils.csv", OIL);
         loadFood("classpath:Carbs.csv", CARB);
 
+        List<RecipeInput> recipeInputs = asList(new ObjectMapper().readValue(new ClassPathResource("classpath:recipes.json").getInputStream(), RecipeInput[].class));
 
-        recipeRepository.saveAll(
-                asList(
-                        recipe()
-                                .description("Een heerlijke tomaat")
-                                .ingredients(
-                                        ingredient(foodRepository.findByName("Tomato"), 1, PIECE)
-                                )
-                                .build()
-                ));
+        recipeInputs.stream()
+                .map(r -> recipe()
+                        .description(r.getDescription())
+                        .ingredients(toIngredientList(r))
+                        .build())
+                .forEach(recipe -> recipeRepository.save(recipe));
 
         LOGGER.info("initialisation succeeded!!");
     }
 
+    private List<Ingredient> toIngredientList(RecipeInput recipeInput) {
+        return recipeInput.getIngredientList().stream().map(this::toIngredient).collect(toList());
+    }
+
+    private Ingredient toIngredient(IngredientInput ingredientInput) {
+        return ingredient(foodRepository.findByName(ingredientInput.getName()), ingredientInput.getAmount(), ingredientInput.getType());
+    }
+
     private void loadFood(String fileName, FoodType foodType) throws IOException {
-        try (InputStream resource = new ClassPathResource(fileName).getInputStream();
-             BufferedReader reader = new BufferedReader(new InputStreamReader(resource))) {
+        InputStream resource;
+        try {
+            resource = new ClassPathResource(fileName).getInputStream();
+        } catch (FileNotFoundException fileNotFoundException) {
+            resource = new ClassPathResource(fileName.replace("classpath:", "")).getInputStream();
+        }
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(resource))) {
             reader
                     .lines()
                     .map(v -> food(v, foodType))
                     .forEach(v -> foodRepository.save(v));
         }
+        resource.close();
     }
 }
