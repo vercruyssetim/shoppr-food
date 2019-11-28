@@ -1,8 +1,10 @@
 package com.switchfully.shoppr.recipe;
 
+import com.switchfully.shoppr.food.Food;
+
 import javax.persistence.*;
-import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.GenerationType.SEQUENCE;
@@ -22,13 +24,18 @@ public class Recipe {
     @JoinColumn(name = "FK_RECIPE_ID")
     private List<Ingredient> ingredients;
 
+    @OneToMany(cascade = ALL, orphanRemoval = true)
+    @JoinColumn(name = "FK_RECIPE_ID")
+    private List<Instruction> instructions;
+
     private Recipe() {
 
     }
 
-    public Recipe(String description, List<Ingredient> ingredients) {
+    public Recipe(String description, List<Ingredient> ingredients, List<Instruction> instructions) {
         this.description = description;
         this.ingredients = ingredients;
+        this.instructions = instructions;
     }
 
     public long getId() {
@@ -41,5 +48,9 @@ public class Recipe {
 
     public List<Ingredient> getIngredients() {
         return ingredients;
+    }
+
+    public List<Instruction> getInstructions() {
+        return instructions;
     }
 }

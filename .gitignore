@@ -4,5 +4,6 @@
 .gradle
 
 build
+out
 gradlew.bat
 

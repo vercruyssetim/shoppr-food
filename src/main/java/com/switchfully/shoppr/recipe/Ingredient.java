@@ -46,6 +46,10 @@ public class Ingredient {
         return food;
     }
 
+    public String getType() {
+        return food.getName();
+    }
+
     public Quantity getQuantity() {
         return quantity;
     }

@@ -7,6 +7,7 @@ public class RecipeBuilder {
 
     private String description;
     private List<Ingredient> ingredients;
+    private List<Instruction> instructions;
 
     private RecipeBuilder() {
 
@@ -17,7 +18,7 @@ public class RecipeBuilder {
     }
 
     public Recipe build() {
-        return new Recipe(description, ingredients);
+        return new Recipe(description, ingredients, instructions);
     }
 
     public RecipeBuilder description(String description) {
@@ -32,6 +33,11 @@ public class RecipeBuilder {
 
     public RecipeBuilder ingredients(List<Ingredient> ingredients) {
         this.ingredients = ingredients;
+        return this;
+    }
+
+    public RecipeBuilder instructions(List<Instruction> instructions) {
+        this.instructions = instructions;
         return this;
     }
 }
