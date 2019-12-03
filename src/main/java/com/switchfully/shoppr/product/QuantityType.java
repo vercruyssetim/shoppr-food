@@ -1,4 +1,4 @@
-package com.switchfully.shoppr.recipe;
+package com.switchfully.shoppr.product;
 
 public enum QuantityType {
     PIECE,

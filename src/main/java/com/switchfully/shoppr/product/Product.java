@@ -1,12 +1,12 @@
-package com.switchfully.shoppr.food;
+package com.switchfully.shoppr.product;
 
 import javax.persistence.*;
 
 import static javax.persistence.EnumType.STRING;
 
 @Entity
-@Table(name = "FOOD")
-public class Food {
+@Table(name = "PRODUCT")
+public class Product {
 
     @Id
     @SequenceGenerator(name = "food_seq", sequenceName = "food_seq", initialValue = 1, allocationSize = 1)
@@ -16,18 +16,21 @@ public class Food {
     private String name;
 
     @Enumerated(STRING)
-    private FoodType foodType;
+    private ProductType productType;
 
-    private Food() {
+    @Enumerated(STRING)
+    private QuantityType quantityType;
+
+    private Product() {
     }
 
-    private Food(String name, FoodType foodType) {
+    private Product(String name, ProductType productType) {
         this.name = name;
-        this.foodType = foodType;
+        this.productType = productType;
     }
 
-    public static Food food(String name, FoodType foodType) {
-        return new Food(name, foodType);
+    public static Product product(String name, ProductType productType) {
+        return new Product(name, productType);
     }
 
     public long getId() {
@@ -38,7 +41,7 @@ public class Food {
         return name;
     }
 
-    public FoodType getFoodType() {
-        return foodType;
+    public ProductType getProductType() {
+        return productType;
     }
 }
