@@ -23,19 +23,19 @@ public class InitResource {
 
     private static Logger LOGGER = LoggerFactory.getLogger(InitResource.class);
 
-    private ProductRepository foodRepository;
+    private ProductRepository productRepository;
 
     public InitResource(ProductRepository productRepository) {
-        this.foodRepository = productRepository;
+        this.productRepository = productRepository;
     }
 
     @GetMapping(path = "init")
     public void init() throws IOException {
-        foodRepository.deleteAll();
+        productRepository.deleteAll();
 
         ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver(getClass().getClassLoader());
 
-        Stream.of(resolver.getResources("classpath:food/*"))
+        Stream.of(resolver.getResources("classpath:product/*"))
                 .peek(r -> LOGGER.info("Loading " + r.getFilename()))
                 .forEach(r -> loadFood(r, ProductType.valueOf(r.getFilename())));
 
@@ -47,7 +47,7 @@ public class InitResource {
             reader
                     .lines()
                     .map(v -> product(v, productType))
-                    .forEach(v -> foodRepository.save(v));
+                    .forEach(v -> productRepository.save(v));
         } catch (IOException ioException) {
             throw new RuntimeException(ioException);
         }
