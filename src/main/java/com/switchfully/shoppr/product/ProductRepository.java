@@ -1,12 +1,13 @@
 package com.switchfully.shoppr.product;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface ProductRepository extends CrudRepository<Product, Long> {
+public interface ProductRepository extends PagingAndSortingRepository<Product, Long> {
 
-    Product findByName(String name);
+    List<Product> findByNameContaining(@Param("name") String name);
 
-    List<Product> findByProductType(ProductType productType);
+    List<Product> findByProductType(@Param("productType") ProductType productType);
 }

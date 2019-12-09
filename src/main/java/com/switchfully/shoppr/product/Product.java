@@ -44,4 +44,8 @@ public class Product {
     public ProductType getProductType() {
         return productType;
     }
+
+    public QuantityType getQuantityType() {
+        return quantityType;
+    }
 }
